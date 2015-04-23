@@ -1,5 +1,7 @@
 #![feature(libc)]
 extern crate libc;
+use std::ffi::CStr;
+use std::str;
 
 #[link(name = "groonga")]
 extern {
@@ -15,4 +17,11 @@ extern {
                         flag: *mut libc::c_int) -> i64;
     pub fn grn_get_version() -> *mut libc::c_char;
     pub fn grn_fin() -> i64;
+}
+
+pub fn get_groonga_version() -> &'static str {
+    unsafe {
+        let slice = CStr::from_ptr(grn_get_version());
+        return str::from_utf8(slice.to_bytes()).unwrap();
+    }
 }

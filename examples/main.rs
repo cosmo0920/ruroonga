@@ -7,8 +7,8 @@ fn main() {
     unsafe {
         let rc = grn_init();
         let ctx = grn_ctx_open(rc);
-        let slice = CStr::from_ptr(ruroonga::grn_get_version());
-        println!("Hello in Ruroonga with Groonga: {}", str::from_utf8(slice.to_bytes()).unwrap());
+        println!("Hello in Ruroonga with Groonga: {}", get_groonga_version());
+
         let rc = grn_ctx_close(ctx);
         let _ = grn_fin();
     }
