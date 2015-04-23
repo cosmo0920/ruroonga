@@ -8,7 +8,6 @@ fn main() {
         let rc = grn_init();
         let ctx = grn_ctx_open(rc);
         println!("Hello in Ruroonga with Groonga: {}", get_groonga_version());
-
         let rc = grn_ctx_close(ctx);
         let _ = grn_fin();
     }
