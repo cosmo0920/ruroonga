@@ -19,6 +19,20 @@ extern {
     pub fn grn_fin() -> i64;
 }
 
+pub fn groonga_init() -> *mut libc::c_void {
+    unsafe {
+        let rc = grn_init();
+        return grn_ctx_open(rc);
+    }
+}
+
+pub fn groonga_fin(ctx: *mut libc::c_void) {
+    unsafe {
+        let _ = grn_ctx_close(ctx);
+        let _ = grn_fin();
+    }
+}
+
 pub fn get_groonga_version() -> &'static str {
     unsafe {
         let slice = CStr::from_ptr(grn_get_version());
