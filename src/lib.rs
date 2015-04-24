@@ -56,7 +56,13 @@ pub fn groonga_db_use(ctx: *mut libc::c_void, dbpath: &str) -> *mut libc::c_void
 
 pub fn get_groonga_version() -> &'static str {
     unsafe {
-        let slice = CStr::from_ptr(grn_get_version());
+        return convert_cstr_to_str(grn_get_version());
+    }
+}
+
+pub fn convert_cstr_to_str(cstr: *mut libc::c_char) -> &'static str {
+    unsafe {
+        let slice = CStr::from_ptr(cstr);
         return str::from_utf8(slice.to_bytes()).unwrap();
     }
 }
