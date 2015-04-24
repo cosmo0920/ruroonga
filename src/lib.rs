@@ -1,9 +1,12 @@
 #![feature(libc)]
 #![feature(collections)]
 #![feature(convert)]
+#![feature(path_ext)]
 extern crate libc;
 use std::ffi::CStr;
 use std::str;
+use std::path::Path;
+use std::fs::PathExt;
 
 #[link(name = "groonga")]
 extern {
@@ -32,6 +35,22 @@ pub fn groonga_fin(ctx: *mut libc::c_void) {
     unsafe {
         let _ = grn_ctx_close(ctx);
         let _ = grn_fin();
+    }
+}
+
+pub fn groonga_db_use(ctx: *mut libc::c_void, dbpath: &str) -> *mut libc::c_void {
+    unsafe {
+        let c_dbpath = convert_str_to_cstr(dbpath);
+        let path = Path::new(dbpath);
+        let path_displayable = path.display();
+        let db_ctx;
+        if path.exists() {
+            println!("{} exists create db skipped.", path_displayable);
+            db_ctx = grn_db_open(ctx, c_dbpath);
+        } else {
+            db_ctx = grn_db_create(ctx, c_dbpath, None);
+        };
+        return db_ctx;
     }
 }
 
