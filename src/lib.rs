@@ -1,4 +1,6 @@
 #![feature(libc)]
+#![feature(collections)]
+#![feature(convert)]
 extern crate libc;
 use std::ffi::CStr;
 use std::str;
@@ -38,4 +40,12 @@ pub fn get_groonga_version() -> &'static str {
         let slice = CStr::from_ptr(grn_get_version());
         return str::from_utf8(slice.to_bytes()).unwrap();
     }
+}
+
+pub fn convert_str_to_cstr(s: &str) -> *mut libc::c_char {
+    let string = s.to_string();
+    let bytes = string.into_bytes();
+    let mut x : Vec<libc::c_char> = bytes.map_in_place(|w| w as libc::c_char);;
+    let slice = x.as_mut_slice();
+    return slice.as_mut_ptr();
 }
