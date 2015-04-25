@@ -45,7 +45,7 @@ pub fn groonga_db_use(ctx: *mut libc::c_void, dbpath: &str) -> *mut libc::c_void
         let path_displayable = path.display();
         let db_ctx;
         if path.exists() {
-            println!("{} exists create db skipped.", path_displayable);
+            println!("{} exists. Creating db is skipped.", path_displayable);
             db_ctx = grn_db_open(ctx, c_dbpath);
         } else {
             db_ctx = grn_db_create(ctx, c_dbpath, None);
