@@ -42,7 +42,13 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
 
 pub fn get_groonga_version() -> &'static str {
     unsafe {
-        let slice = CStr::from_ptr(groonga::grn_get_version());
+        return convert_const_cstr_to_str(groonga::grn_get_version());
+    }
+}
+
+pub fn convert_const_cstr_to_str(cstr: *const libc::c_char) -> &'static str {
+    unsafe {
+        let slice = CStr::from_ptr(cstr);
         return str::from_utf8(slice.to_bytes()).unwrap();
     }
 }
