@@ -24,21 +24,21 @@ pub fn groonga_fin(ctx: *mut groonga::grn_ctx) {
     }
 }
 
-// pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut libc::c_void {
-//     unsafe {
-//         let c_dbpath = convert_str_to_cstr(dbpath);
-//         let path = Path::new(dbpath);
-//         let path_displayable = path.display();
-//         let db_ctx;
-//         if path.exists() {
-//             println!("{} exists. Creating db is skipped.", path_displayable);
-//             db_ctx = groonga::grn_db_open(ctx, c_dbpath);
-//         } else {
-//             db_ctx = groonga::grn_db_create(ctx, c_dbpath, None);
-//         };
-//         return db_ctx;
-//     }
-// }
+pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga::grn_obj {
+    unsafe {
+        let c_dbpath = convert_str_to_cstr(dbpath);
+        let path = Path::new(dbpath);
+        let path_displayable = path.display();
+        let db_ctx;
+        if path.exists() {
+            println!("{} exists. Creating db is skipped.", path_displayable);
+            db_ctx = groonga::grn_db_open(ctx, c_dbpath);
+        } else {
+            db_ctx = groonga::grn_db_create(ctx, c_dbpath, ::std::mem::zeroed());
+        };
+        return db_ctx;
+    }
+}
 
 pub fn get_groonga_version() -> &'static str {
     unsafe {
