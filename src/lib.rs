@@ -35,7 +35,6 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
             println!("{} exists. Creating db is skipped.", path_displayable);
             db_ctx = groonga::grn_db_open(ctx, c_dbpath);
         } else {
-            // TODO: suspicious implementation. It is really correct?
             db_ctx = groonga::grn_db_create(ctx, c_dbpath, ::std::mem::zeroed());
         };
         return db_ctx;
