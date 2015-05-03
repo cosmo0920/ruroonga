@@ -4,5 +4,4 @@ version = "0.1.0"
 authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
-license = "LGPL-2.1"
 license-file = "LICENSE"
