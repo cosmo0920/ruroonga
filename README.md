@@ -8,7 +8,11 @@ Rust + Groonga = Ruroonga!
 
 ### Target Rust Version
 
-* 1.0.0-beta
+* 1.0.0-beta2+
+
+### Dependencies
+
+* Groonga 5.0.2 or later.
 
 ### Japanese pronunciation
 
