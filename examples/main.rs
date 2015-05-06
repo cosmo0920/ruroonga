@@ -1,5 +1,5 @@
 extern crate ruroonga;
-use ruroonga::*;
+use ruroonga::commandapi::*;
 
 fn main() {
     let ctx = groonga_init();
