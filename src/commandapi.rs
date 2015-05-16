@@ -6,6 +6,15 @@ use std::fs::PathExt;
 use std::mem;
 use groonga;
 
+macro_rules! convert_cstr_to_str {
+    ($cstr:expr) => {
+        {
+            let slice = CStr::from_ptr($cstr);
+            return str::from_utf8(slice.to_bytes()).unwrap();
+        }
+    };
+}
+
 pub fn groonga_init() -> *mut groonga::grn_ctx {
     unsafe {
         let rc = groonga::grn_init();
@@ -56,21 +65,7 @@ pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx, command: &str) -> lib
 
 pub fn get_groonga_version() -> &'static str {
     unsafe {
-        return convert_const_cstr_to_str(groonga::grn_get_version());
-    }
-}
-
-pub fn convert_const_cstr_to_str(cstr: *const libc::c_char) -> &'static str {
-    unsafe {
-        let slice = CStr::from_ptr(cstr);
-        return str::from_utf8(slice.to_bytes()).unwrap();
-    }
-}
-
-pub fn convert_cstr_to_str(cstr: *mut libc::c_char) -> &'static str {
-    unsafe {
-        let slice = CStr::from_ptr(cstr);
-        return str::from_utf8(slice.to_bytes()).unwrap();
+        return convert_cstr_to_str!(groonga::grn_get_version());
     }
 }
 
