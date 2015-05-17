@@ -10,7 +10,11 @@ macro_rules! convert_cstr_to_str {
     ($cstr:expr) => {
         {
             let slice = CStr::from_ptr($cstr);
-            return str::from_utf8(slice.to_bytes()).unwrap();
+            let result = str::from_utf8(slice.to_bytes()); //.unwrap();
+            match result {
+                Ok(v) => return v,
+                Err(_) => return "",
+            }
         }
     };
 }
