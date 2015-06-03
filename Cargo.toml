@@ -5,3 +5,4 @@ authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
 license-file = "LICENSE"
+homepage = "https://github.com/cosmo0920/ruroonga"
