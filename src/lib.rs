@@ -1,5 +1,5 @@
 #![feature(libc)]
-#![feature(collections)]
+#![feature(map_in_place)]
 #![feature(convert)]
 #![feature(path_ext)]
 extern crate libc;
