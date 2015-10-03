@@ -76,7 +76,7 @@ pub fn get_groonga_version() -> &'static str {
 pub fn convert_str_to_cstr(s: &str) -> *mut libc::c_char {
     let string = s.to_string();
     let bytes = string.into_bytes();
-    let mut x : Vec<libc::c_char> = bytes.map_in_place(|w| w as libc::c_char);;
+    let mut x : Vec<libc::c_char> = bytes.into_iter().map(|w| w as libc::c_char).collect();
     let slice = x.as_mut_slice();
     return slice.as_mut_ptr();
 }
