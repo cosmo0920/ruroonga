@@ -8,7 +8,7 @@ Rust + Groonga = Ruroonga!
 
 ### Target Rust Version
 
-* 1.5.0-dev (nightly)
+* 1.6.0-dev (nightly)
 
 ### Dependencies
 
