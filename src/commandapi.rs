@@ -2,7 +2,6 @@ extern crate libc;
 use std::ffi::CStr;
 use std::str;
 use std::path::Path;
-use std::fs::PathExt;
 use std::mem;
 use groonga;
 
