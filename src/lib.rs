@@ -117,8 +117,12 @@ impl Command {
         commandapi::get_groonga_version()
     }
 
-    pub fn execute(&mut self, command: &str) -> libc::c_uint {
-        commandapi::groonga_execute_command(self.ctx, command)
+    pub fn execute(&mut self, command: &str) -> String {
+        let result = commandapi::groonga_execute_command(self.ctx, command);
+        match result {
+            Ok(v) => v,
+            Err(_) => "".to_string()
+        }
     }
 
     fn close(&mut self) {
