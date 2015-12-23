@@ -3,6 +3,7 @@ use std::ffi::CStr;
 use std::str;
 use std::path::Path;
 use std::mem;
+use std::result::Result::{Ok, Err};
 use groonga;
 
 macro_rules! convert_cstr_to_str {
@@ -18,17 +19,27 @@ macro_rules! convert_cstr_to_str {
     };
 }
 
-pub fn groonga_init() -> *mut groonga::grn_ctx {
+pub fn groonga_init() -> libc::c_int {
     unsafe {
-        let rc = groonga::grn_init();
+        return groonga::grn_init();
+    }
+}
+
+pub fn groonga_fin() -> libc::c_int {
+    unsafe {
+        return groonga::grn_fin();
+    }
+}
+
+pub fn groonga_ctx_open(rc: libc::c_int) -> *mut groonga::grn_ctx {
+    unsafe {
         return groonga::grn_ctx_open(rc);
     }
 }
 
-pub fn groonga_fin(ctx: *mut groonga::grn_ctx) {
+pub fn groonga_ctx_close(ctx: *mut groonga::grn_ctx) -> libc::c_int {
     unsafe {
-        let _ = groonga::grn_ctx_close(ctx);
-        let _ = groonga::grn_fin();
+        return groonga::grn_ctx_close(ctx);
     }
 }
 

@@ -1,12 +1,17 @@
 extern crate ruroonga;
-use ruroonga::commandapi::*;
+
+use ruroonga as groonga;
 
 fn main() {
-    let ctx = groonga_init();
+    // initialize libgroonga and automatically finalize
+    groonga::LibGroonga::new().unwrap();
+
+    let ctx = groonga::Context::new().unwrap();
+    let mut db = groonga::Database::new(ctx.clone());
     let dbpath = "test.db";
-    let _ = groonga_db_use(ctx, dbpath);
-    let command = "table_create Users TABLE_HASH_KEY ShortText";
-    let _ = groonga_execute_command(ctx, command);
-    println!("Hello in Ruroonga with Groonga: {}", get_groonga_version());
-    let _ = groonga_fin(ctx);
+    let _ = db.uses(dbpath);
+    let grn_command = "table_create Users TABLE_HASH_KEY ShortText";
+    let mut command = groonga::Command::new(ctx.clone());
+    let _ = command.execute(grn_command);
+    println!("Hello in Ruroonga with Groonga: {}", groonga::Command::groonga_version());
 }
