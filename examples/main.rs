@@ -12,6 +12,9 @@ fn main() {
     let _ = db.uses(dbpath);
     let grn_command = "table_create Users TABLE_HASH_KEY ShortText";
     let mut command = groonga::Command::new(ctx.clone());
-    let _ = command.execute(grn_command);
+    let _ = command.execute(grn_command.clone());
+    let dump = "dump";
+    let result = command.execute(dump.clone());
+    println!("result: {}", result);
     println!("Hello in Ruroonga with Groonga: {}", groonga::Command::groonga_version());
 }
