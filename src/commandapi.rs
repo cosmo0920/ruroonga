@@ -1,11 +1,13 @@
 extern crate libc;
+extern crate groonga_sys as ffi;
+
 use std::ffi::CStr;
 use std::str;
 use std::path::Path;
 use std::ptr;
 use std::mem;
 use std::result::Result::{Ok, Err};
-use groonga;
+use ffi::groonga;
 
 macro_rules! convert_cstr_to_str {
     ($cstr:expr) => {

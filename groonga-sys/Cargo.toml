@@ -1,12 +1,8 @@
 [package]
-name = "ruroonga"
-version = "0.3.0"
+name = "groonga-sys"
+version = "0.1.0"
 authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
-license-file = "LICENSE"
+license-file = "../LICENSE"
 homepage = "https://github.com/cosmo0920/ruroonga"
-
-[dependencies.groonga-sys]
-version = "~0.1.0"
-path = "groonga-sys"

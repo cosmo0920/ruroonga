@@ -1,9 +1,10 @@
 #![feature(libc)]
 #![feature(convert)]
 extern crate libc;
+extern crate groonga_sys as ffi;
 use std::mem;
+use ffi::groonga as groonga;
 
-pub mod groonga;
 mod commandapi;
 
 #[derive(Clone, Debug)]
