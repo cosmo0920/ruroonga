@@ -62,13 +62,17 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
     }
 }
 
-pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx, command: &str) -> Result<String, String>
-{
+pub fn groonga_send_command(ctx: *mut groonga::grn_ctx, command: &str) -> libc::c_uint {
     unsafe {
         let command_length = command.len() as u32;
         let c_command = convert_str_to_cstr(command);
         let flag = 0;
-        let _ = groonga::grn_ctx_send(ctx, c_command, command_length, flag);
+        return groonga::grn_ctx_send(ctx, c_command, command_length, flag);
+    }
+}
+
+pub fn groonga_receive_command(ctx: *mut groonga::grn_ctx) -> Result<String, String> {
+    unsafe {
         let mut output_ptr: *mut libc::c_char = ptr::null_mut();
         let received_len: *mut libc::c_uint = libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_uint;
         let received_flag: *mut libc::c_int = libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_int;
@@ -81,6 +85,12 @@ pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx, command: &str) -> Res
         libc::free(received_flag as *mut libc::c_void);
         return Ok(out);
     }
+}
+
+pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx, command: &str) -> Result<String, String>
+{
+    groonga_send_command(ctx, command);
+    return groonga_receive_command(ctx);
 }
 
 pub fn get_groonga_version() -> &'static str {
