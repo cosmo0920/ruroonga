@@ -63,6 +63,14 @@ impl Context {
         Ok(())
     }
 
+    pub fn send(&mut self, command: &str) -> u32 {
+        return commandapi::groonga_send_command(self.ctx, command);
+    }
+
+    pub fn receive(&mut self) -> Result<String, String> {
+        return commandapi::groonga_receive_command(self.ctx);
+    }
+
     pub fn close(&mut self) -> Result<(), String> {
         if self.disposed {
             return Ok(())
