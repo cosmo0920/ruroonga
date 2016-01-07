@@ -55,6 +55,14 @@ impl Context {
         Ok(Context{ ctx: ctx, disposed: false })
     }
 
+    pub fn connect(&mut self, host: &str, port: i32) -> Result<(), String> {
+        let rc = commandapi::groonga_ctx_connect(self.ctx, host, port);
+        if rc != groonga::GRN_SUCCESS {
+            return Err("Couldn't connect to Groonga server.".to_string())
+        }
+        Ok(())
+    }
+
     pub fn close(&mut self) -> Result<(), String> {
         if self.disposed {
             return Ok(())
