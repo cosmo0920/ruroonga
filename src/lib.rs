@@ -7,6 +7,8 @@ use ffi::groonga as groonga;
 
 mod commandapi;
 
+pub type ID = u32;
+
 #[derive(Clone, Debug)]
 pub struct LibGroonga {
     disposed: bool
@@ -63,7 +65,7 @@ impl Context {
         Ok(())
     }
 
-    pub fn send(&mut self, command: &str) -> u32 {
+    pub fn send(&mut self, command: &str) -> ID {
         return commandapi::groonga_send_command(self.ctx, command);
     }
 
