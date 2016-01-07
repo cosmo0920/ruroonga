@@ -62,11 +62,12 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
     }
 }
 
-pub fn groonga_ctx_connect(ctx: *mut groonga::grn_ctx, host: &str, port: libc::c_int) -> libc::c_int {
+pub fn groonga_ctx_connect(ctx: *mut groonga::grn_ctx, host: &str, port: libc::c_int) -> *mut groonga::grn_ctx {
     unsafe {
         let c_host = convert_str_to_cstr(host);
         let flag = 0;
-        return groonga::grn_ctx_connect(ctx, c_host, port, flag);
+        let _ = groonga::grn_ctx_connect(ctx, c_host, port, flag);
+        return ctx;
     }
 }
 

@@ -57,12 +57,36 @@ impl Context {
         Ok(Context{ ctx: ctx, disposed: false })
     }
 
-    pub fn connect(&mut self, host: &str, port: i32) -> Result<(), String> {
-        let rc = commandapi::groonga_ctx_connect(self.ctx, host, port);
-        if rc != groonga::GRN_SUCCESS {
-            return Err("Couldn't connect to Groonga server.".to_string())
+    pub fn close(&mut self) -> Result<(), String> {
+        if self.disposed {
+            return Ok(())
         }
+        let rc = commandapi::groonga_ctx_close(self.ctx);
+        if rc != groonga::GRN_SUCCESS {
+            return Err("Couldn't dispose Groonga Context.".to_string())
+        }
+        unsafe {
+            self.ctx = mem::zeroed();
+        }
+        self.disposed = true;
         Ok(())
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Remote {
+    ctx: *mut groonga::grn_ctx,
+    disposed: bool
+}
+
+impl Remote {
+    pub fn new(host: &str, port: i32) -> Result<Remote, String> {
+        let ctx = commandapi::groonga_ctx_open(0);
+        let conn = commandapi::groonga_ctx_connect(ctx, host, port);
+        if conn.is_null() {
+            return Err("Couldn't connect remote Groonga.".to_string())
+        }
+        Ok(Remote{ ctx: ctx, disposed: false })
     }
 
     pub fn send(&mut self, command: &str) -> ID {
@@ -71,6 +95,10 @@ impl Context {
 
     pub fn receive(&mut self) -> Result<String, String> {
         return commandapi::groonga_receive_command(self.ctx);
+    }
+
+    pub fn execute(&mut self, command: &str) -> Result<String, String> {
+        return commandapi::groonga_execute_command(self.ctx, command);
     }
 
     pub fn close(&mut self) -> Result<(), String> {
