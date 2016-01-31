@@ -7,6 +7,9 @@ keywords = ["FFI"]
 license-file = "LICENSE"
 homepage = "https://github.com/cosmo0920/ruroonga"
 
+[dependencies]
+libc = "~0.2.0"
+
 [dependencies.groonga-sys]
 version = "~0.1.0"
 path = "groonga-sys"
