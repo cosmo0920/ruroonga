@@ -1,4 +1,3 @@
-#![feature(convert)]
 extern crate libc;
 extern crate groonga_sys as ffi;
 use std::mem;
