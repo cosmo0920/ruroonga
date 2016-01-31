@@ -1,6 +1,7 @@
 Ruroonga
 ===
 [![Build Status](https://travis-ci.org/cosmo0920/ruroonga.svg?branch=master)](https://travis-ci.org/cosmo0920/ruroonga)
+[![](http://meritbadge.herokuapp.com/ruroonga)](https://crates.io/crates/ruroonga)
 
 A Rust lang binding for Groonga.
 
