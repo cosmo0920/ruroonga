@@ -13,7 +13,7 @@ Rust + Groonga = Ruroonga!
 
 ### Stable Milestone
 
-Currently, targeting in 1.7.0. Because `mut_as_slice` marked stable in `1.7.0`.
+Currently, it is targeting in 1.7.0. Because `mut_as_slice` will be marked stable in `1.7.0`.
 
 ### Dependencies
 
