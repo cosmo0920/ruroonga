@@ -11,6 +11,10 @@ Rust + Groonga = Ruroonga!
 
 * 1.8.0-dev (nightly)
 
+### Stable Milestone
+
+Currently, targeting in 1.7.0. Because `mut_as_slice` marked stable in `1.7.0`.
+
 ### Dependencies
 
 * Groonga 5.0.2 or later.
