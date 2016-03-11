@@ -160,7 +160,7 @@ mod test {
     }
 
     #[test]
-    fn test_integration_test() {
+    fn integration_test() {
         let groonga = LibGroonga::new();
         let is_success = match groonga {
             Ok(_) => true,
