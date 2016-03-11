@@ -9,6 +9,7 @@ homepage = "https://github.com/cosmo0920/ruroonga"
 
 [dependencies]
 libc = "~0.2.0"
+tempdir = "~0.3"
 
 [dependencies.groonga-sys]
 version = "~0.1.0"

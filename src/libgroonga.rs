@@ -139,3 +139,59 @@ impl Drop for Command {
         self.close()
     }
 }
+
+#[cfg(test)]
+mod test {
+    extern crate tempdir;
+    use super::*;
+    use self::tempdir::TempDir;
+
+    fn setup_dbpath() -> String {
+        let dbdir = TempDir::new("ruroonga");
+        let dbname = "test.db";
+        let mut dbpath_buf = dbdir.unwrap().into_path();
+        dbpath_buf.push(dbname);
+        let dbpath = match dbpath_buf.to_str() {
+            Some(v) => v,
+            None => panic!("Could not get temporary database path."),
+        };
+
+        dbpath.to_owned()
+    }
+
+    #[test]
+    fn test_integration_test() {
+        let groonga = LibGroonga::new();
+        let is_success = match groonga {
+            Ok(_) => true,
+            Err(_) => false,
+        };
+
+        assert_eq!(true, is_success);
+
+        let context = Context::new();
+        let is_success = match context {
+            Ok(_) => true,
+            Err(_) => false,
+        };
+
+        assert_eq!(true, is_success);
+
+        let ctx = match context {
+            Ok(v) => v,
+            Err(_) => panic!("Could not get context."),
+        };
+
+        let mut db = Database::new(ctx.clone());
+        let dbpath = setup_dbpath();
+        let _ = db.uses(&*dbpath);
+
+        let grn_command = "table_create Users TABLE_HASH_KEY ShortText";
+        let mut command = Command::new(ctx.clone());
+        let _ = command.execute(grn_command.clone());
+
+        let dump = "dump";
+        let result = command.execute(dump.clone());
+        assert_eq!("table_create Users TABLE_HASH_KEY ShortText\n", result);
+    }
+}
