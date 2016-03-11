@@ -9,11 +9,7 @@ Rust + Groonga = Ruroonga!
 
 ### Target Rust Version
 
-* 1.8.0-dev (nightly)
-
-### Stable Milestone
-
-Currently, it is targeting in 1.7.0. Because `mut_as_slice` will be marked stable in `1.7.0`.
+* 1.7.0 or later.
 
 ### Dependencies
 
