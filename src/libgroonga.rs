@@ -182,16 +182,20 @@ mod test {
             Err(_) => panic!("Could not get context."),
         };
 
-        let mut db = Database::new(ctx.clone());
         let dbpath = setup_dbpath();
-        let _ = db.uses(&*dbpath);
+        let _ = Database::new(ctx.clone()).uses(&*dbpath);
 
         let grn_command = "table_create Users TABLE_HASH_KEY ShortText";
         let mut command = Command::new(ctx.clone());
-        let _ = command.execute(grn_command.clone());
+        let table_create_result = command.execute(grn_command.clone());
+        assert_eq!("true", table_create_result);
 
         let dump = "dump";
         let result = command.execute(dump.clone());
-        assert_eq!("table_create Users TABLE_HASH_KEY ShortText\n", result);
+        let dumped_command = "table_create Users TABLE_HASH_KEY ShortText\n";
+        assert!(
+            dumped_command == result ||
+            format!("{}\u{fffd}\u{7f}", dumped_command) == result
+        );
     }
 }
