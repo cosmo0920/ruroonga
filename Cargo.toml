@@ -1,6 +1,6 @@
 [package]
 name = "ruroonga"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
