@@ -62,19 +62,22 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
     }
 }
 
-pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx, command: &str) -> Result<String, String>
-{
+pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx,
+                               command: &str)
+                               -> Result<String, String> {
     unsafe {
         let command_length = command.len() as u32;
         let c_command = convert_str_to_cstr(command);
         let flag = 0;
         let _ = groonga::grn_ctx_send(ctx, c_command, command_length, flag);
         let mut output_ptr: *mut libc::c_char = ptr::null_mut();
-        let received_len: *mut libc::c_uint = libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_uint;
-        let received_flag: *mut libc::c_int = libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_int;
+        let received_len: *mut libc::c_uint =
+            libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_uint;
+        let received_flag: *mut libc::c_int =
+            libc::malloc(mem::size_of::<i32>() as libc::size_t) as *mut libc::c_int;
         let _ = groonga::grn_ctx_recv(ctx, &mut output_ptr, received_len, received_flag);
         if output_ptr.is_null() {
-            return Err("Couldn't get result.".to_string())
+            return Err("Couldn't get result.".to_string());
         }
         let out = CStr::from_ptr(&mut *output_ptr).to_string_lossy().into_owned();
         libc::free(received_len as *mut libc::c_void);
@@ -92,7 +95,7 @@ pub fn get_groonga_version() -> &'static str {
 pub fn convert_str_to_cstr(s: &str) -> *mut libc::c_char {
     let string = s.to_string();
     let bytes = string.into_bytes();
-    let mut x : Vec<libc::c_char> = bytes.into_iter().map(|w| w as libc::c_char).collect();
+    let mut x: Vec<libc::c_char> = bytes.into_iter().map(|w| w as libc::c_char).collect();
     let slice = x.as_mut_slice();
     return slice.as_mut_ptr();
 }

@@ -1,30 +1,30 @@
 extern crate libc;
 extern crate groonga_sys as ffi;
 use std::mem;
-use ffi::groonga as groonga;
+use ffi::groonga;
 use super::commandapi;
 
 #[derive(Clone, Debug)]
 pub struct LibGroonga {
-    disposed: bool
+    disposed: bool,
 }
 
 impl LibGroonga {
     pub fn new() -> Result<LibGroonga, String> {
-        let rc =  commandapi::groonga_init();
+        let rc = commandapi::groonga_init();
         if rc != groonga::GRN_SUCCESS {
-            return Err("Couldn't initilize Groonga.".to_string())
+            return Err("Couldn't initilize Groonga.".to_string());
         }
-        Ok(LibGroonga{ disposed: false })
+        Ok(LibGroonga { disposed: false })
     }
 
     fn close(&mut self) -> Result<(), String> {
         if self.disposed {
-            return Ok(())
+            return Ok(());
         }
         let rc = commandapi::groonga_fin();
         if rc != groonga::GRN_SUCCESS {
-            return Err("Couldn't finalized Groonga.".to_string())
+            return Err("Couldn't finalized Groonga.".to_string());
         }
         self.disposed = true;
         Ok(())
@@ -40,25 +40,28 @@ impl Drop for LibGroonga {
 #[derive(Clone, Debug)]
 pub struct Context {
     ctx: *mut groonga::grn_ctx,
-    disposed: bool
+    disposed: bool,
 }
 
 impl Context {
     pub fn new() -> Result<Context, String> {
         let ctx = commandapi::groonga_ctx_open(0);
         if ctx.is_null() {
-            return Err("Couldn't create Groonga Context.".to_string())
+            return Err("Couldn't create Groonga Context.".to_string());
         }
-        Ok(Context{ ctx: ctx, disposed: false })
+        Ok(Context {
+            ctx: ctx,
+            disposed: false,
+        })
     }
 
     pub fn close(&mut self) -> Result<(), String> {
         if self.disposed {
-            return Ok(())
+            return Ok(());
         }
         let rc = commandapi::groonga_ctx_close(self.ctx);
         if rc != groonga::GRN_SUCCESS {
-            return Err("Couldn't dispose Groonga Context.".to_string())
+            return Err("Couldn't dispose Groonga Context.".to_string());
         }
         unsafe {
             self.ctx = mem::zeroed();
@@ -71,12 +74,15 @@ impl Context {
 #[derive(Clone, Debug)]
 pub struct Database {
     ctx: *mut groonga::grn_ctx,
-    disposed: bool
+    disposed: bool,
 }
 
 impl Database {
     pub fn new(ctx: Context) -> Database {
-        Database{ctx: ctx.ctx, disposed: false}
+        Database {
+            ctx: ctx.ctx,
+            disposed: false,
+        }
     }
 
     pub fn uses(&mut self, dbpath: &str) {
@@ -85,7 +91,7 @@ impl Database {
 
     fn close(&mut self) {
         if self.disposed {
-            return
+            return;
         }
         unsafe {
             self.ctx = mem::zeroed();
@@ -103,12 +109,15 @@ impl Drop for Database {
 #[derive(Clone, Debug)]
 pub struct Command {
     ctx: *mut groonga::grn_ctx,
-    disposed: bool
+    disposed: bool,
 }
 
 impl Command {
     pub fn new(ctx: Context) -> Command {
-        Command{ctx: ctx.ctx, disposed: false}
+        Command {
+            ctx: ctx.ctx,
+            disposed: false,
+        }
     }
 
     pub fn groonga_version() -> &'static str {
@@ -119,13 +128,13 @@ impl Command {
         let result = commandapi::groonga_execute_command(self.ctx, command);
         match result {
             Ok(v) => v,
-            Err(_) => "".to_string()
+            Err(_) => "".to_string(),
         }
     }
 
     fn close(&mut self) {
         if self.disposed {
-            return
+            return;
         }
         unsafe {
             self.ctx = mem::zeroed();
@@ -193,9 +202,6 @@ mod test {
         let dump = "dump";
         let result = command.execute(dump.clone());
         let dumped_command = "table_create Users TABLE_HASH_KEY ShortText\n";
-        assert!(
-            dumped_command == result ||
-            format!("{}\u{fffd}\u{7f}", dumped_command) == result
-        );
+        assert!(dumped_command == result || format!("{}\u{fffd}\u{7f}", dumped_command) == result);
     }
 }
