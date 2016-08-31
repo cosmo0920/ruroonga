@@ -1,6 +1,6 @@
 [package]
 name = "ruroonga"
-version = "0.4.1"
+version = "0.5.0"
 authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
@@ -12,5 +12,5 @@ libc = "~0.2.0"
 tempdir = "~0.3"
 
 [dependencies.groonga-sys]
-version = "~0.1.0"
+version = "~0.2.0"
 path = "groonga-sys"
