@@ -2,6 +2,7 @@ Ruroonga
 ===
 [![Build Status](https://travis-ci.org/cosmo0920/ruroonga.svg?branch=master)](https://travis-ci.org/cosmo0920/ruroonga)
 [![](http://meritbadge.herokuapp.com/ruroonga)](https://crates.io/crates/ruroonga)
+[![Build status](https://ci.appveyor.com/api/projects/status/jhibfy8rr7rtpv7h/branch/master?svg=true)](https://ci.appveyor.com/project/cosmo0920/ruroonga/branch/master)
 
 [Documentation](http://cosmo0920.github.io/ruroonga/ruroonga/index.html)
 
