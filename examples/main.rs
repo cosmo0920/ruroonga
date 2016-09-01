@@ -5,16 +5,7 @@ use ruroonga as groonga;
 fn main() {
     // initialize libgroonga and automatically finalize
     let libgroonga = groonga::LibGroonga::new();
-    // For more safety
-    let is_success = match libgroonga {
-        Ok(_) => true,
-        Err(e) => {
-            println!("{}", e);
-            false
-        }
-    };
-
-    assert_eq!(true, is_success);
+    assert_eq!(true, libgroonga.is_ok());
     let ctx = groonga::Context::new().unwrap();
     let mut db = groonga::Database::new(ctx.clone());
     let dbpath = "test.db";
