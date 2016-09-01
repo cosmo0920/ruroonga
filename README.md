@@ -36,7 +36,7 @@ If you install Groonga in `C:\Groonga`, above variables should set like this:
 
 ```powershell
 PS> $Env:GROONGA_INCLUDE_DIR = "C:\Groonga\include"
-PS> $Env:GROONGA_LIB_DIR = "C:\Gronga\lib"
+PS> $Env:GROONGA_LIB_DIR = "C:\Groonga\lib"
 PS> $Env:GROONGA_BIN_DIR = "C:\Groonga\bin"
 ```
 
