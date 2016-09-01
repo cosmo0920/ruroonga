@@ -13,9 +13,10 @@ environment:
     - TARGET: x86_64-pc-windows-gnu
       BITS: 64
       RUSTVER: 1.11.0
+      GROONGAVER: 6.0.7
 install:
-  - ps: Start-FileDownload "http://packages.groonga.org/windows/groonga/groonga-6.0.7-x64.exe"
-  - groonga-6.0.7-x64.exe /S /D=C:\Groonga
+  - ps: Start-FileDownload "http://packages.groonga.org/windows/groonga/groonga-${Env:GROONGAVER}-x64.exe"
+  - groonga-%GROONGAVER%-x64.exe /S /D=C:\Groonga
   - ps: Start-FileDownload "https://static.rust-lang.org/dist/rust-${env:RUSTVER}-${env:TARGET}.exe"
   - rust-%RUSTVER%-%TARGET%.exe /VERYSILENT /NORESTART /DIR="C:\Program Files (x86)\Rust"
   - SET PATH=%PATH%;C:\Program Files (x86)\Rust\bin
