@@ -4,8 +4,17 @@ use ruroonga as groonga;
 
 fn main() {
     // initialize libgroonga and automatically finalize
-    groonga::LibGroonga::new().unwrap();
+    let libgroonga = groonga::LibGroonga::new();
+    // For more safety
+    let is_success = match libgroonga {
+        Ok(_) => true,
+        Err(e) => {
+            println!("{}", e);
+            false
+        }
+    };
 
+    assert_eq!(true, is_success);
     let ctx = groonga::Context::new().unwrap();
     let mut db = groonga::Database::new(ctx.clone());
     let dbpath = "test.db";
