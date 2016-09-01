@@ -1,7 +1,7 @@
 extern crate libc;
 extern crate groonga_sys as ffi;
 
-use std::ffi::CStr;
+use std::ffi::{CString, CStr};
 use std::str;
 use std::path::Path;
 use std::ptr;
@@ -93,9 +93,7 @@ pub fn get_groonga_version() -> &'static str {
 }
 
 pub fn convert_str_to_cstr(s: &str) -> *mut libc::c_char {
-    let string = s.to_string();
-    let bytes = string.into_bytes();
-    let mut x: Vec<libc::c_char> = bytes.into_iter().map(|w| w as libc::c_char).collect();
-    let slice = x.as_mut_slice();
-    return slice.as_mut_ptr();
+    let cstr = CString::new(s).unwrap();
+    let ptr = cstr.into_raw();
+    return ptr;
 }
