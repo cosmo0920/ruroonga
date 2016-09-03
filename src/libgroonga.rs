@@ -171,20 +171,10 @@ mod test {
     #[test]
     fn integration_test() {
         let groonga = LibGroonga::new();
-        let is_success = match groonga {
-            Ok(_) => true,
-            Err(_) => false,
-        };
-
-        assert_eq!(true, is_success);
+        assert!(groonga.is_ok());
 
         let context = Context::new();
-        let is_success = match context {
-            Ok(_) => true,
-            Err(_) => false,
-        };
-
-        assert_eq!(true, is_success);
+        assert!(context.is_ok());
 
         let ctx = match context {
             Ok(v) => v,
