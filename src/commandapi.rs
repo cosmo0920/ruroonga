@@ -23,14 +23,14 @@ macro_rules! convert_cstr_to_str {
 }
 
 /// Initialize libgroonga.
-pub fn groonga_init() -> libc::c_int {
+pub fn groonga_init() -> groonga::grn_rc {
     unsafe {
         return groonga::grn_init();
     }
 }
 
 /// Finalized libgroonga.
-pub fn groonga_fin() -> libc::c_int {
+pub fn groonga_fin() -> groonga::grn_rc {
     unsafe {
         return groonga::grn_fin();
     }
@@ -44,7 +44,7 @@ pub fn groonga_ctx_open(rc: libc::c_int) -> *mut groonga::grn_ctx {
 }
 
 /// Close libgroonga context.
-pub fn groonga_ctx_close(ctx: *mut groonga::grn_ctx) -> libc::c_int {
+pub fn groonga_ctx_close(ctx: *mut groonga::grn_ctx) -> groonga::grn_rc {
     unsafe {
         return groonga::grn_ctx_close(ctx);
     }
