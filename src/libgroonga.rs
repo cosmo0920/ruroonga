@@ -120,7 +120,7 @@ impl Command {
         }
     }
 
-    pub fn groonga_version() -> &'static str {
+    pub fn groonga_version<'a>() -> &'a str {
         commandapi::get_groonga_version()
     }
 
