@@ -22,30 +22,35 @@ macro_rules! convert_cstr_to_str {
     };
 }
 
+/// Initialize libgroonga.
 pub fn groonga_init() -> libc::c_int {
     unsafe {
         return groonga::grn_init();
     }
 }
 
+/// Finalized libgroonga.
 pub fn groonga_fin() -> libc::c_int {
     unsafe {
         return groonga::grn_fin();
     }
 }
 
+/// Open libgroonga context.
 pub fn groonga_ctx_open(rc: libc::c_int) -> *mut groonga::grn_ctx {
     unsafe {
         return groonga::grn_ctx_open(rc);
     }
 }
 
+/// Close libgroonga context.
 pub fn groonga_ctx_close(ctx: *mut groonga::grn_ctx) -> libc::c_int {
     unsafe {
         return groonga::grn_ctx_close(ctx);
     }
 }
 
+/// Create/Open libgronga database.
 pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga::grn_obj {
     unsafe {
         let c_dbpath = convert_str_to_cstr(dbpath);
@@ -62,6 +67,7 @@ pub fn groonga_db_use(ctx: *mut groonga::grn_ctx, dbpath: &str) -> *mut groonga:
     }
 }
 
+/// Send and receive libgroonga command.
 pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx,
                                command: &str)
                                -> Result<String, String> {
@@ -86,6 +92,7 @@ pub fn groonga_execute_command(ctx: *mut groonga::grn_ctx,
     }
 }
 
+/// Get libgroonga version information.
 pub fn get_groonga_version() -> &'static str {
     unsafe {
         return convert_cstr_to_str!(groonga::grn_get_version());
