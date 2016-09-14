@@ -103,7 +103,7 @@ pub enum grn_rc {
     GRN_CANCEL = -77,
     GRN_WINDOW_FUNCTION_ERROR = -78,
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_encoding {
@@ -124,7 +124,7 @@ pub enum grn_command_version {
     GRN_COMMAND_VERSION_2 = 2,
     GRN_COMMAND_VERSION_3 = 3,
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_log_level {
@@ -139,7 +139,7 @@ pub enum grn_log_level {
     GRN_LOG_DEBUG = 8,
     GRN_LOG_DUMP = 9,
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_content_type {
@@ -292,7 +292,7 @@ pub struct Struct_Unnamed5 {
 impl ::std::default::Default for Struct_Unnamed5 {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_builtin_type {
@@ -368,7 +368,7 @@ pub struct grn_posting {
 impl ::std::default::Default for grn_posting {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_operator {
@@ -452,7 +452,7 @@ pub enum grn_operator {
     GRN_OP_REGEXP = 77,
     GRN_OP_FUZZY = 78,
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_info_type {
@@ -666,7 +666,7 @@ pub struct grn_str {
 impl ::std::default::Default for grn_str {
     fn default() -> Self { unsafe { ::std::mem::zeroed() } }
 }
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 #[repr(u32)]
 #[derive(Debug)]
 pub enum grn_char_type {
