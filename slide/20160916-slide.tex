@@ -1,0 +1,334 @@
+\documentclass[12pt, unicode]{beamer}
+\usetheme{Warsaw}
+\usepackage{luatexja}
+\usepackage{color}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\bfseries,
+  commentstyle=\color{red}\itshape,
+  stringstyle=\color{black!30!green},
+  showstringspaces=false,
+  keywordstyle=\color{blue}\bfseries
+}
+%color
+\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
+
+\title{How to make bindings in Rust}
+\subtitle{... and its modern toolchain, Drop traits, and Windows suffering.}
+\author{Hiroshi Hatake}
+\date[2016/04/08]{Technical information sharing seminar}
+
+\begin{document}
+
+\frame{\maketitle}
+
+\begin{frame}{Introduction}
+\begin{block}{What is ``Binding''?}
+Binding is a library which call or use other language's function and feature.
+\end{block}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{block}{Difficutlies of ``Binding''}
+Binding is difficult. Because ...
+\end{block}
+\onslide<1->
+\begin{itemize}
+\item<2-> Need to call Foreign Function Interface
+\item<3-> Absorb language differences (C and other languages)
+\item<4-> Interact two different environment
+\item<5-> Control mangling rules
+\end{itemize}
+\end{frame}
+
+\newcommand\Small{\fontsize{9}{9.2}\selectfont}
+\begin{frame}[fragile]{How to create bindings in Rust}
+\begin{block}{Rust has generating binding tool from C header}
+It is \textbf {rust bindgen}\footnote[frame]{https://github.com/Yamakaky/rust-bindgen}.
+\end{block}
+\onslide<2->
+{\large Example:}
+\onslide<2->
+\begin{lstlisting}[language={bash},basicstyle=\ttfamily\Small]
+  bindgen --link lua \
+    --builtins /usr/include/lua.h --output lua.rs
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Generate binding from C header}
+\begin{block}{Actual example}
+Then, let's generate binding for Groonga!
+\end{block}
+\onslide<2->
+\begin{lstlisting}[language={bash},basicstyle=\ttfamily\Small]
+  bindgen --link groonga \
+    --builtins /usr/include/groonga/groonga.h \
+    --output groonga.rs
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Create binding crate}
+\begin{block}{Actual example}
+Second, put into src directory.
+\end{block}
+\begin{lstlisting}[language={bash},basicstyle=\ttfamily\Small]
+% tree -L 2 .
+.
+├── Cargo.toml
+├── build.rs
+└── src
+    ├── groonga.rs # <- e.g.) Put groonga.rs here!
+    └── lib.rs
+\end{lstlisting}
+\end{frame}
+
+%% Define highlighting for Rust.
+\lstdefinelanguage{Rust} {
+  morecomment = [l]{//},
+  morecomment = [l]{///},
+  morecomment = [s]{/*}{*/},
+  morestring=[b]",
+  sensitive = true,
+  morekeywords = {extern, crate, fn, let, use, mut, impl, for, struct, pub, if}
+}
+\begin{frame}[fragile]{Create binding crate}
+\begin{block}{Actual example}
+Declare using groonga module in lib.rs which is the library entry point.
+\end{block}
+\begin{lstlisting}[language={Rust},basicstyle=\ttfamily\Small]
+extern crate libc;
+
+pub mod groonga;
+\end{lstlisting}
+\end{frame}
+
+\frame{\centering \Large Then, Complie and fix!}
+
+\frame{\centering \Large Complie and fix!!}
+
+\frame{\centering \Large Complie and fix!!!}
+
+\frame{\centering \Large Until errors are dismissed....}
+
+\begin{frame}[fragile]{Create binding crate}
+\begin{block}{Actual example}
+Confirm to succeed to be built.
+\end{block}
+\begin{lstlisting}[language={bash},basicstyle=\ttfamily\Small]
+% cargo build
+    Updating registry `...`
+   Compiling pkg-config v0.3.8
+   Compiling libc v0.2.16
+   Compiling groonga-sys v0.3.0 (file:///...)
+\end{lstlisting}
+\onslide<2-> {\Large Yay!}
+\end{frame}
+
+\begin{frame}{Traits, manage resources, Rustish concept}
+\begin{block}{Make more Rustish}
+rust-bindgen does \textbf {not} generate Rustish binding.
+\newline
+It is auto generated and just as a set of function signature declarations.
+\end{block}
+\end{frame}
+
+\begin{frame}{Traits, manage resources, Rustish concept}
+\begin{block}{Make more Rustish}
+  How to make more Rustish binding?
+  \newline
+  \onslide<2->
+  You should know about \textbf {Traits}. Especially, \textbf {Drop trait}.
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Traits, manage resources, Rustish concept}
+\begin{block}{Traits}
+  Traits tells a funtionality which must be implemented in type.
+  \newline
+  \onslide<2->
+  It sometimes are used in generics bound.
+\end{block}
+\begin{lstlisting}[language={Rust},basicstyle=\ttfamily\Small]
+  fn from_iter<T: Iterator<A>>(iterator: T)
+    -> SomeCollection<A>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Traits, manage resources, Rustish concept}
+\begin{block}{Drop trait\footnote[frame]{https://doc.rust-lang.org/std/ops/trait.Drop.html}}
+  Drop trait's drop method is called when a variable goes out of scope.\footnote[frame]{Perhaps, C++ users noticed by intuition that Drop trait is simiar to concept of destructor.}
+\end{block}
+\onslide<2->
+\lstinputlisting[language={Rust},basicstyle=\ttfamily\Small]{mydrop.rs}
+\end{frame}
+
+\begin{frame}[fragile]{Traits, manage resources, Rustish concept}
+\begin{block}{Actual example}
+In Ruroonga, Drop trait is often used to manage allocated resources.
+\end{block}
+\onslide<2->
+\begin{lstlisting}[language={Rust},basicstyle=\ttfamily\Small]
+pub struct LibGroonga {/* omitted */}
+
+impl LibGroonga {
+    pub fn new() -> Result<LibGroonga, String> {
+        // initialize libgroonga
+    }
+
+    fn close(&mut self) -> Result<(), String> {
+        // finalize libgroonga
+    }
+}
+
+impl Drop for LibGroonga {
+    // Called when a variable goes out of scope.
+    fn drop(&mut self) {
+        self.close().unwrap();
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Cargo's build script mechanism}
+\begin{block}{About Cargo\footnote[frame]{http://doc.crates.io/index.html}}
+  Cargo, which is the package manager for Rust, has build script feature\footnote[frame]{http://doc.crates.io/build-script.html}.
+  \newline
+  This feature is used to customize building phase.
+  \newline
+  Some crates need to link non-Rust code. This kind of linking task sometimes should be customizable.\footnote[frame]{Some crate should compile C libraries before linking. And some crate should distinguish platforms whether it is Windows or not.}
+\end{block}
+\end{frame}
+
+\begin{frame}{pkg-config}
+  \begin{block}{pkg-config}
+    pkg-config which is the one of great tool on UNIX like environment.
+    \onslide<2->
+    \newline
+    It is a helper tool used when compiling applications and libraries.
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{pkg-config in Rust}
+  \begin{block}{pkg-config crate}
+    Rust community already has pkg-config crate! Amazing!!
+  \end{block}
+  To use pkg-config, specify the following in Cargo.toml:
+\begin{lstlisting}[language={XML},basicstyle=\ttfamily\Small]
+[package]
+  ...
+build = "build.rs"
+
+[build-dependencies]
+pkg-config = "~0.3"
+\end{lstlisting}
+\end{frame}
+
+\newcommand\XSmall{\fontsize{7}{7}\selectfont}
+\begin{frame}[fragile]{pkg-config in Rust}
+  \begin{block}{pkg-config in build script}
+    pkg-config is used in build script.
+  \end{block}
+  \begin{lstlisting}[language={Rust},basicstyle=\ttfamily\XSmall]
+/// build.rs
+extern crate pkg_config;
+
+use std::env;
+
+fn main() {
+    let target = env::var("TARGET").unwrap();
+
+    if !target.contains("windows") {
+        if let Ok(info) = pkg_config::find_library("groonga") {
+            if info.include_paths.len() > 0 {
+                let paths = env::join_paths(info.include_paths).unwrap();
+                println!("cargo:include={}", paths.to_str().unwrap());
+            }
+            return;
+        }
+    }
+}
+  \end{lstlisting}
+  Yay, it's so easy!
+\end{frame}
+
+\begin{frame}[fragile]{For Windows?}
+  \begin{block}{Windows support in build script}
+    Why not support Windows?
+    \newline
+    \onslide<2->
+    It's a nightmare for *nix developers.
+    \newline
+    \onslide<3->
+    But Rust community encourages to support Windows.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Windows support}
+  \begin{block}{Windows support in build script}
+    If you use Windows, how to set environment information?
+    Use pkg-config? No, Windows platform often lacks of it.
+    \newline
+    \onslide<2->
+    Instead, we can always use \textbf {environment variables}.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Windows support}
+  \begin{block}{Actual build script example}
+    See the next page.
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Windows support in build script}
+  \begin{lstlisting}[language={Rust},basicstyle=\ttfamily\XSmall]
+// fn main() ..
+let target = env::var("TARGET").unwrap();
+
+let lib_dir = env::var("GROONGA_LIB_DIR").ok();
+let bin_dir = env::var("GROONGA_BIN_DIR").ok();
+let include_dir = env::var("GROONGA_INCLUDE_DIR").ok();
+
+if lib_dir.is_none() && include_dir.is_none() {
+    if !target.contains("windows") {
+        // same as before
+    }
+}
+
+let lib = "groonga";
+let mode = if env::var_os("GROONGA_STATIC").is_some() {
+    "static"
+} else {
+    "dylib"
+};
+
+if let Some(lib_dir) = lib_dir {
+    println!("cargo:rustc-link-search=native={}", lib_dir);
+}
+if let Some(bin_dir) = bin_dir {
+    println!("cargo:rustc-link-search=native={}", bin_dir);
+}
+
+println!("cargo:rustc-link-lib={}={}", mode, lib);
+
+if let Some(include_dir) = include_dir {
+    println!("cargo:include={}", include_dir);
+}
+  \end{lstlisting}
+
+\end{frame}
+
+\frame{\centering \Large Demo}
+
+\begin{frame}{Conclusion}
+  \begin{itemize}
+  \item rust bindgen makes easy to create binding.
+  \item Drop trait is useful to manage allocated resources.
+  \item cargo package manager can handle custom build script.
+  \item cargo's build script can handle environment variables which is often used for Windows platform.
+  \item Rust bindings sometimes works well on Windows.
+  \end{itemize}
+\end{frame}
+
+\frame{\centering \Large Any questions?}
+
+\end{document}
