@@ -16,7 +16,7 @@ Rust + Groonga = Ruroonga!
 
 ### Dependencies
 
-* Groonga 5.0.2 or later.
+* Groonga 6.0.8 or later.
 
 ### Japanese pronunciation
 
