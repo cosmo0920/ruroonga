@@ -1,6 +1,6 @@
 [package]
 name = "groonga-sys"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Hiroshi Hatake <cosmo0920.wp@gmail.com>"]
 description = "A Rust language binding for Groonga."
 keywords = ["FFI"]
