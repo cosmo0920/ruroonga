@@ -12,7 +12,7 @@ pub struct LibGroonga {
 impl LibGroonga {
     pub fn new() -> Result<LibGroonga, String> {
         let rc = commandapi::groonga_init();
-        if rc != groonga::GRN_SUCCESS {
+        if rc != groonga::grn_rc::GRN_SUCCESS {
             return Err("Couldn't initilize Groonga.".to_string());
         }
         Ok(LibGroonga { disposed: false })
@@ -23,7 +23,7 @@ impl LibGroonga {
             return Ok(());
         }
         let rc = commandapi::groonga_fin();
-        if rc != groonga::GRN_SUCCESS {
+        if rc != groonga::grn_rc::GRN_SUCCESS {
             return Err("Couldn't finalized Groonga.".to_string());
         }
         self.disposed = true;
@@ -60,7 +60,7 @@ impl Context {
             return Ok(());
         }
         let rc = commandapi::groonga_ctx_close(self.ctx);
-        if rc != groonga::GRN_SUCCESS {
+        if rc != groonga::grn_rc::GRN_SUCCESS {
             return Err("Couldn't dispose Groonga Context.".to_string());
         }
         unsafe {
