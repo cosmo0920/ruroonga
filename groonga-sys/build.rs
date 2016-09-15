@@ -11,7 +11,7 @@ fn main() {
 
     if lib_dir.is_none() && include_dir.is_none() {
         if !target.contains("windows") {
-            if let Ok(info) = pkg_config::find_library("groonga") {
+            if let Ok(info) = pkg_config::probe_library("groonga") {
                 if info.include_paths.len() > 0 {
                     let paths = env::join_paths(info.include_paths).unwrap();
                     println!("cargo:include={}", paths.to_str().unwrap());
