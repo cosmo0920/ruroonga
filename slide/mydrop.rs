@@ -11,4 +11,4 @@ impl Drop for MyDrop {
 fn main() {
     let _x = MyDrop;
 }
-/// #=> Dropping!
+// #=> Dropping!
