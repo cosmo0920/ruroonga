@@ -54,4 +54,10 @@ In more detail, please refer to [the build from source section for Windows](http
 
 ### LICENSE
 
+#### Source code
+
 [LGPL-2.1](LICENSE).
+
+#### Slide
+
+[CC BY-NC-SA 2.0](https://creativecommons.org/licenses/by-nc-sa/2.0/).
