@@ -13,7 +13,7 @@ environment:
     #   GROONGAVER: 6.0.8
     - TARGET: x86_64-pc-windows-gnu
       BITS: 64
-      RUSTVER: 1.12.0
+      RUSTVER: 1.13.0
       GROONGAVER: 6.0.8
 install:
   - ps: Start-FileDownload "http://packages.groonga.org/windows/groonga/groonga-${Env:GROONGAVER}-x64.exe"
